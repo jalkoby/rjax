@@ -1,0 +1,51 @@
+= Rjax
+
+Change default rendering template for xhr requests
+
+== Installation
+
+Add this line to your application's Gemfile:
+
+  gem 'rjax'
+
+And then execute:
+
+  $ bundle
+
+Or install it yourself as:
+
+  $ gem install rjax
+
+== Usage
+
+If you have a lot `if` statements like follow code try to use rjax
+
+  def index
+    @users = User.all
+    render :partial => 'users' if request.xhr?
+  end
+
+  def index
+    @users = User.all
+  end
+
+  # if request is not xhr - render `index` template
+  # if render is xhr - render `index_rjax` template if it exists; otherwise render `index` template
+
+Rjax allow next configurations
+
+  # config/initializers/rjax.rb
+
+  Rjax.config do |config|
+    config.suffix = "rjax"     # suffix for template of action
+    config.prefix = nil        # prefix for template of action
+    config.raise_error = false # raise error if xhr template is missing
+  end
+
+== Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request

@@ -1,0 +1,13 @@
+language: ruby
+rvm:
+  - 1.9.2
+  - 1.9.3
+  - 2.0.0
+  - rbx-19mode
+  - jruby-19mode
+gemfile:
+  - Gemfile
+  - gemfiles/rails_30
+  - gemfiles/rails_31
+  - gemfiles/rails_32
+  - gemfiles/rails_40
