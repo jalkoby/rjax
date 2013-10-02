@@ -2,7 +2,7 @@
 
 Solve template dispatch on ajax request
 
-{<img src="https://travis-ci.org/jalkoby/rjax.png?branch=master" alt="Build Status" />}[https://travis-ci.org/jalkoby/rjax]
+{<img src="https://codeclimate.com/github/jalkoby/rjax.png" />}[https://codeclimate.com/github/jalkoby/rjax]
 {<img src="https://travis-ci.org/jalkoby/rjax.png?branch=master" alt="Build Status" />}[https://travis-ci.org/jalkoby/rjax]
 {<img src="https://badge.fury.io/rb/rjax.png" alt="Gem Version" />}[http://badge.fury.io/rb/rjax]
 
