@@ -9,29 +9,55 @@ class Dummy < Rails::Application
   config.session_store :cookie_store, key: '****************************************'
   config.secret_token = '****************************************'
 
-  # Log to spec/dummy/test.log
   config.logger = Logger.new(STDOUT)
-  # This is important, otherwise the tests will fail
   Rails.logger = config.logger
 
   config.action_controller.view_path
 
   # Our routes
   routes.draw do
-    controller :rjax do
-      get '/' => :index
-      get :about
+    resources :users, :only => [:index, :show] do
+      get :search, :popular, :on => :collection
+    end
+    resources :articles, :only => [:index, :show] do
+      get :search, :on => :collection
     end
   end
 end
 
-class RjaxController < ActionController::Base
+class BaseController < ActionController::Base
   prepend_view_path Rails.root
-  layout 'rjax'
+end
 
+class UsersController < BaseController
   def index
+    @users = %w(Sam Alise John)
+    rjax
   end
 
-  def about
+  def search
+    rjax :users => %w(Sam John)
+  end
+
+  def popular
+    rjax %w(Jessy Walt)
+  end
+
+  def show
+    rjax "Alex"
+  end
+end
+
+class ArticlesController < BaseController
+  def index
+    rjax %w(Monday Tuesday Sunday)
+  end
+
+  def search
+    rjax :articles => %w(Monday Sunday)
+  end
+
+  def show
+    rjax "Monday"
   end
 end

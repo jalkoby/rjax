@@ -1,33 +1,61 @@
 require 'spec_helper'
 
-describe RjaxController, :type => :controller do
-  let(:app) { Rails.application }
-  let(:headers) { { "HTTP_X_REQUESTED_WITH" => "XMLHttpRequest" } }
+describe Rjax, :type => :request do
+  let(:app)  { Rails.application }
+  let(:body) { last_response.body.strip }
 
-  before do
-    Rjax.instance_variable_set("@config", nil)
+  it 'rjax template' do
+    ajax '/users'
+
+    body.should == 'Sam, Alise, John'
   end
 
-  it 'render ajax template if it exists' do
-    get '/', {}, headers
+  it 'rjax general partial' do
+    ajax '/users/search'
 
-    last_response.should be_successful
-    last_response.body.strip.should == "rjax#index_rjax"
+    body.should == 'Sam, John'
   end
 
-  context 'rjax template missing' do
-    it 'raise error if configurated' do
-      Rjax.config.raise_error = true
-      get '/about', {}, headers
+  it 'rjax collection partial' do
+    ajax '/users/popular'
 
-      last_response.status.should == 500
-    end
+    body.should == "Jessy\nWalt"
+  end
 
-    it 'render default template' do
-      get '/about', {}, headers
+  it 'rjax instance template' do
+    ajax '/users/1'
 
-      last_response.should be_successful
-      last_response.body.strip.should == "layout - rjax#about"
-    end
+    body.should == 'Alex'
+  end
+
+  it 'convention general partial' do
+    ajax '/articles'
+
+    body.should == "Monday\nTuesday\nSunday"
+  end
+
+  it 'convention collection partial' do
+    ajax '/articles/search'
+
+    body.should == "Monday, Sunday"
+  end
+
+  it 'collection instance partial' do
+    ajax '/articles/1'
+
+    body.should == "Monday"
+  end
+
+  it 'raise error is configurated incorrect' do
+    expect do
+      described_class.config do |config|
+        config.suffix = ""
+        config.prefix = ""
+      end
+    end.to raise_error(Rjax::InvalidConfigurationError)
+  end
+
+  def ajax(path)
+    get path, {}, { "HTTP_X_REQUESTED_WITH" => "XMLHttpRequest", 'HTTP_ACCEPT' => '*/*' }
   end
 end

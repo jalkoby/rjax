@@ -5,7 +5,7 @@ module Rjax
   class InvalidConfigurationError < BaseError
   end
 
-  class TemplateMissingError < BaseError
+  class PartialMissingError < BaseError
   end
 end
 

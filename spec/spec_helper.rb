@@ -11,5 +11,9 @@ RSpec.configure do |config|
   config.filter_run :focus => true
   config.run_all_when_everything_filtered = true
 
-  config.include Rack::Test::Methods, :type => :controller
+  config.include Rack::Test::Methods, :type => :request
+
+  config.before(:each) do
+    Rjax.instance_variable_set("@config", nil)
+  end
 end

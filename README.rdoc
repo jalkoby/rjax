@@ -1,6 +1,6 @@
 = Rjax
 
-Change default rendering template for xhr requests
+Solve template dispatch on ajax request
 
 == Installation
 
@@ -18,29 +18,53 @@ Or install it yourself as:
 
 == Usage
 
-If you have a lot `if` statements like follow code try to use rjax
+Rjax will be useful if you have a lot action which serve http and ajax request. It might looks like:
 
   def index
     @users = User.all
-    render :partial => 'users' if request.xhr?
+    render :partials => 'users', :locals => { :users => @users }  if request.xhr?
+    # or
+    render :index_ajax if request.xhr?
   end
+
+Rjax replace it with single method call
 
   def index
     @users = User.all
+    rjax
   end
+  # render index_rjax template
 
-  # if request is not xhr - render `index` template
-  # if render is xhr - render `index_rjax` template if it exists; otherwise render `index` template
+  def index
+    @users = User.all
+    rjax @users
+  end
+  # render _user_rjax or _user partial with variable `user`
 
-Rjax allow next configurations
+  def index
+    @users = User.all
+    rjax :users => @users, :other => :variable
+  end
+  # render _users_rjax or _users partial with variables users & other
+
+  def show
+    @user = User.find(params[:id])
+    rjax @user
+  end
+  # render _user_rjax or _user partial with `user` variable
+
+The name of partial is based on controller name. If you don't like rjax suffix or it's out your team's convention
+feel free to configure wrapper:
 
   # config/initializers/rjax.rb
-
   Rjax.config do |config|
-    config.suffix = "rjax"     # suffix for template of action
-    config.prefix = nil        # prefix for template of action
-    config.raise_error = false # raise error if xhr template is missing
+    config.suffix = "suffix"
+    config.prefix = "prefix"
   end
+
+  prefix_%action_name%_suffix
+
+  _prefix_%partial_name%_suffix
 
 == Contributing
 
