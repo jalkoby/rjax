@@ -20,7 +20,7 @@ class Dummy < Rails::Application
       get :search, :popular, :on => :collection
     end
     resources :articles, :only => [:index, :show] do
-      get :search, :on => :collection
+      get :search, :popular, :on => :collection
     end
   end
 end
@@ -49,6 +49,8 @@ class UsersController < BaseController
 end
 
 class ArticlesController < BaseController
+  respond_to :html
+
   def index
     rjax %w(Monday Tuesday Sunday)
   end
@@ -57,7 +59,13 @@ class ArticlesController < BaseController
     rjax :articles => %w(Monday Sunday)
   end
 
+  def popular
+    rjax :articles => %w(Friday Saturday), :partial => 'popular'
+  end
+
   def show
-    rjax "Monday"
+    respond_with do |format|
+      format.html { rjax "Monday" }
+    end
   end
 end

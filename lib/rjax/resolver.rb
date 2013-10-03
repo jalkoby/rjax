@@ -18,7 +18,8 @@ class Rjax::Resolver < Struct.new(:options, :controller)
   private
 
   def general_partial
-    { :partial => partial_name(:multi), :locals => options, :layout => false }
+    partial = options.has_key?(:partial) ? options.delete(:partial) : partial_name(:multi)
+    { :partial => partial, :locals => options, :layout => false }
   end
 
   def collection_partial

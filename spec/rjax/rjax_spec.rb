@@ -40,6 +40,12 @@ describe Rjax, :type => :request do
     body.should == "Monday, Sunday"
   end
 
+  it 'use custom partial' do
+    ajax '/articles/popular'
+
+    body.should == "Friday, Saturday"
+  end
+
   it 'collection instance partial' do
     ajax '/articles/1'
 
@@ -56,6 +62,6 @@ describe Rjax, :type => :request do
   end
 
   def ajax(path)
-    get path, {}, { "HTTP_X_REQUESTED_WITH" => "XMLHttpRequest", 'HTTP_ACCEPT' => '*/*' }
+    get path, { :format => :html }, { "HTTP_X_REQUESTED_WITH" => "XMLHttpRequest", 'HTTP_ACCEPT' => '*/*' }
   end
 end

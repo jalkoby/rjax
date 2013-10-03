@@ -31,34 +31,53 @@ Rjax will be useful if you have a lot actions which serve http and ajax requests
     render :index_ajax if request.xhr?
   end
 
-Rjax replace it with single method call
+Rjax adds `rjax` methods in rails controllers.
 
-  def index
-    @users = User.all
-    rjax
+  class UsersController < ApplicationController
+    def index
+      @users = User.all
+      rjax
+    end
+    # calling rjax method without arguments will render template;
+    # the name of template will contain action_name and wrapper;
+    # in this case expected `index_rjax` template;
+
+    def index
+      @users = User.all
+      rjax @users
+    end
+    # calling rjax method is similar to view helper render %collection%;
+    # the only different is also looks for partial with wrapped name;
+    # in this case it will look for partial `_user_rjax` or `_user` and pass variable `user`;
+
+    def index
+      @users = User.all
+      rjax :users => @users, :other => :variable
+    end
+    # calling rjax method with Hash will render partial with locals specified in hash;
+    # the name of partial might be specified in :partial key;
+    # if :partial key is missed expected that view folder contains partial with plural form of controller with or without wrapper;
+    # in this case it will be `_users_rjax` or `_users` partial
+
+    def show
+      @user = User.find(params[:id])
+      rjax @user
+    end
+    # in other cases rjax will render partial and pass this variable into partial;
+    # the name of partial will be singular form of controller with or without wrapper;
+    # in this case it will be `_user_rjax` or `_user` partial
+
+    # it also support respond_with
+    def index
+      respond_with do |format|
+        format.html { rjax }
+        format.json { rjax }
+        format.xml  { rjax }
+      end
+    end
   end
-  # render index_rjax template
 
-  def index
-    @users = User.all
-    rjax @users
-  end
-  # render _user_rjax or _user partial with variable `user`
-
-  def index
-    @users = User.all
-    rjax :users => @users, :other => :variable
-  end
-  # render _users_rjax or _users partial with variables users & other
-
-  def show
-    @user = User.find(params[:id])
-    rjax @user
-  end
-  # render _user_rjax or _user partial with `user` variable
-
-The name of partial is based on controller name. If you don't like rjax suffix or it's out your team's convention
-feel free to configure wrapper:
+If you don't like rjax default wrapper you can configure it:
 
   # config/initializers/rjax.rb
   Rjax.config do |config|
@@ -66,9 +85,9 @@ feel free to configure wrapper:
     config.prefix = "prefix"
   end
 
-  prefix_%action_name%_suffix
+  prefix_%template%_suffix
 
-  _prefix_%partial_name%_suffix
+  _prefix_%partial%_suffix
 
 == Contributing
 
