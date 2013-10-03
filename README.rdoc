@@ -22,7 +22,7 @@ Or install it yourself as:
 
 == Usage
 
-Rjax will be useful if you have a lot action which serve http and ajax request. It might looks like:
+Rjax will be useful if you have a lot actions which serve http and ajax requests. It might looks like:
 
   def index
     @users = User.all
