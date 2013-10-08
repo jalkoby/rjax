@@ -1,6 +1,6 @@
 = Rjax
 
-Solve template dispatch on ajax request
+Elegant responder for ajax requests
 
 {<img src="https://codeclimate.com/github/jalkoby/rjax.png" />}[https://codeclimate.com/github/jalkoby/rjax]
 {<img src="https://travis-ci.org/jalkoby/rjax.png?branch=master" alt="Build Status" />}[https://travis-ci.org/jalkoby/rjax]
@@ -31,7 +31,7 @@ Rjax will be useful if you have a lot actions which serve http and ajax requests
     render :index_ajax if request.xhr?
   end
 
-Rjax adds `rjax` methods in rails controllers.
+Rjax adds `rjax` method in rails controllers.
 
   class UsersController < ApplicationController
     def index
@@ -46,7 +46,7 @@ Rjax adds `rjax` methods in rails controllers.
       @users = User.all
       rjax @users
     end
-    # calling rjax method is similar to view helper render %collection%;
+    # calling rjax method with collection is similar to view helper `render %collection%`;
     # the only different is also looks for partial with wrapped name;
     # in this case it will look for partial `_user_rjax` or `_user` and pass variable `user`;
 
@@ -65,14 +65,14 @@ Rjax adds `rjax` methods in rails controllers.
     end
     # in other cases rjax will render partial and pass this variable into partial;
     # the name of partial will be singular form of controller with or without wrapper;
-    # in this case it will be `_user_rjax` or `_user` partial
+    # in this case it will be `_user_rjax` or `_user` partial and pass variable `user`;
 
     # it also support respond_with
     def index
       respond_with do |format|
         format.html { rjax }
-        format.json { rjax }
-        format.xml  { rjax }
+        format.json
+        format.xml
       end
     end
   end
