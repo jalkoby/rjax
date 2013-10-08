@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Rjax::VERSION
   spec.authors       = ["Sergey Pchelincev"]
   spec.email         = ["jalkoby91@gmail.com"]
-  spec.description   = %q{Solve template dispatch on ajax request}
+  spec.description   = %q{Elegant responder for ajax requests}
   spec.summary       = spec.description
   spec.homepage      = ""
   spec.license       = "MIT"
